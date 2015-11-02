@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,14 +15,12 @@ import javax.swing.JOptionPane;
 
 public class Anagrams {
 
-    public static void main(String[] args)
-            throws IOException, URISyntaxException {
+    public static void main(String[] args) throws IOException, URISyntaxException {
         new Anagrams().run();
     }
 
-    static public boolean isAnagram1(String word1, String word2) {
-        if (word1 != null && word2 != null
-                && word1.length() == word2.length()) {
+    public static boolean isAnagram1(String word1, String word2) {
+        if (word1 != null && word2 != null && word1.length() == word2.length()) {
             char[] letters1 = word1.toLowerCase().toCharArray();
             char[] letters2 = word2.toLowerCase().toCharArray();
             Arrays.sort(letters1);
@@ -32,7 +31,15 @@ public class Anagrams {
         }
     }
 
-    static public boolean isAnagram(String word1, String word2) {
+    public static boolean isAnagram2(String word1, String word2) {
+        if (word1 == null || word2 == null || word1.length() != word2.length()) {
+            return false;
+        } else {
+            return Anagrams.getRep(word1).equals(Anagrams.getRep(word2));
+        }
+    }
+
+    public static boolean isAnagram3(String word1, String word2) {
         if (word1 != null && word2 != null
                 && word1.length() == word2.length()) {
             char[] letters1 = word1.toLowerCase().toCharArray();
@@ -40,8 +47,8 @@ public class Anagrams {
             boolean matched = true;
             for (int i = 0; matched && i < letters1.length; i++) {
                 matched = false;
-                for(int j = 0; !matched && j < letters2.length; j++) {
-                    if(letters1[i] == letters2[j]) {
+                for (int j = 0; !matched && j < letters2.length; j++) {
+                    if (letters1[i] == letters2[j]) {
                         letters2[j] = 'X';
                         matched = true;
                     }
@@ -51,6 +58,12 @@ public class Anagrams {
         } else {
             return false;
         }
+    }
+
+    public static String getRep(String s) {
+        char[] b = s.toLowerCase().toCharArray();
+        Arrays.sort(b);
+        return String.join("", CharBuffer.wrap(b));
     }
 
     private void run() throws IOException, URISyntaxException {
@@ -76,7 +89,7 @@ public class Anagrams {
     private String findAnagrams(String word, List<String> words)
             throws IOException {
         return words.stream()
-                .filter(w -> Anagrams.isAnagram(word, w))
+                .filter(w -> Anagrams.isAnagram2(word, w))
                 .collect(Collectors.joining(", "));
     }
 
