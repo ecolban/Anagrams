@@ -63,7 +63,7 @@ public class Anagrams {
     public static String getRep(String s) {
         char[] b = s.toLowerCase().toCharArray();
         Arrays.sort(b);
-        return String.join("", CharBuffer.wrap(b));
+        return new String(b);
     }
 
     private void run() throws IOException, URISyntaxException {
